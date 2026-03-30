@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --bg: #fffaf2;
+            --surface: #ffffff;
+            --surface-soft: #f8f2e8;
+            --text: #1f2933;
+            --text-muted: #52606d;
+            --brand: #0f6fff;
+            --brand-deep: #0b4eb3;
+            --accent: #ff8f3f;
+            --accent-deep: #d86a1b;
+            --line: #e8dfd0;
+            --shadow-soft: 0 12px 30px rgba(19, 30, 50, 0.08);
+            --shadow-lift: 0 20px 45px rgba(19, 30, 50, 0.14);
+            --radius-xl: 22px;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background:
+                radial-gradient(circle at 8% 5%, rgba(255, 143, 63, 0.15), transparent 32%),
+                radial-gradient(circle at 88% 18%, rgba(15, 111, 255, 0.16), transparent 34%),
+                var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Noto Serif', serif;
+        }
+
+        .navbar {
+            width: 100%;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            padding: 0.8rem clamp(1rem, 4vw, 3rem);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            background: linear-gradient(95deg, rgba(19, 35, 56, 0.92), rgba(11, 78, 179, 0.88));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .navbar-logo > a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            font-weight: 800;
+            letter-spacing: 0.08em;
+        }
+
+        .navbar-menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .navbar-menu > a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 999px;
+            padding: 0.4rem 0.85rem;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .navbar-menu > a:hover {
+            background-color: rgba(255, 255, 255, 0.16);
+            transform: translateY(-1px);
+        }
+
+        .menu-toggle {
+            display: none;
+        }
+
+        .menu-toggle .bar {
+            width: 24px;
+            height: 3px;
+            margin: 3px auto;
+            border-radius: 2px;
+            background-color: #ffffff;
+        }
+
+        header {
+            min-height: 62vh;
+            position: relative;
+            background-image:
+                linear-gradient(115deg, rgba(13, 36, 75, 0.62), rgba(13, 80, 168, 0.46)),
+                url("images/frame.jpeg");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: "Find work that moves your future";
+            position: absolute;
+            left: clamp(1rem, 6vw, 5.5rem);
+            bottom: clamp(2.5rem, 8vw, 5rem);
+            max-width: 14ch;
+            font-family: 'Noto Serif', serif;
+            font-size: clamp(1.9rem, 5.4vw, 4.1rem);
+            line-height: 1.04;
+            letter-spacing: 0.02em;
+            color: #ffffff;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            animation: rise-in 650ms ease-out;
+        }
+
+        .search-wrapper,
+        .filter-box,
+        .job-list,
+        .featured,
+        .testimoni,
+        .blogs,
+        footer {
+            width: min(1180px, calc(100% - 2rem));
+            margin-inline: auto;
+        }
+
+        .search-wrapper {
+            margin-top: -2.25rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        .search-box {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lift);
+            padding: 0.65rem;
+        }
+
+        .search-card {
+            display: flex;
+            gap: 0.65rem;
+        }
+
+        .search-input {
+            width: 100%;
+            border: 1px solid #d7dfeb;
+            border-radius: 10px;
+            padding: 0.85rem 1rem;
+            font-size: 0.98rem;
+            color: var(--text);
+        }
+
+        .search-input:focus {
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(15, 111, 255, 0.17);
+            outline: none;
+        }
+
+        .search-button,
+        .join-button,
+        .job-more,
+        .featured-button {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .search-button {
+            min-width: 132px;
+            background: linear-gradient(130deg, var(--brand), var(--brand-deep));
+            color: #fff;
+            box-shadow: 0 8px 18px rgba(15, 111, 255, 0.25);
+        }
+
+        .search-button:hover {
+            transform: translateY(-1px);
+        }
+
+        .filter-box {
+            margin-top: 1.2rem;
+            margin-bottom: 1rem;
+            padding: 1rem 1rem 0.2rem;
+            background-color: rgba(255, 255, 255, 0.75);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .filter-dropdown {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            border-bottom: 1px dashed #cfbfa4;
+            padding-bottom: 0.9rem;
+        }
+
+        .filter-select {
+            border: 1px solid #ddd0bb;
+            border-radius: 9px;
+            min-width: 150px;
+            background: #fff;
+            color: var(--text);
+            padding: 0.5rem 0.7rem;
+        }
+
+        .filter-chosen {
+            padding: 0.85rem 0 0.55rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+        }
+
+        .chosen-card {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: linear-gradient(130deg, #eef5ff, #dce9ff);
+            color: var(--brand-deep);
+            border: 1px solid #c9daff;
+            border-radius: 999px;
+            padding: 0.35rem 0.78rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .job-list {
+            margin-top: 1.8rem;
+            margin-bottom: 2rem;
+            padding: 1.2rem;
+            background: var(--surface-soft);
+            border-radius: var(--radius-xl);
+            border: 1px solid #ebddc6;
+        }
+
+        .job-card {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr auto;
+            align-items: center;
+            gap: 1rem;
+            margin: 0.9rem 0;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid #eadcc8;
+            background: #fff;
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.22s ease, box-shadow 0.22s ease;
+        }
+
+        .job-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lift);
+        }
+
+        .job-name {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .job-profile {
+            width: 68px;
+            height: 68px;
+            object-fit: cover;
+            border-radius: 18px;
+            border: 1px solid #e7eef9;
+            padding: 0.25rem;
+            background: #fff;
+        }
+
+        .job-detail h4 {
+            margin-bottom: 0.1rem;
+            color: var(--brand-deep);
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.03em;
+        }
+
+        .job-detail h3 {
+            margin-bottom: 0.2rem;
+            font-size: 1.05rem;
+        }
+
+        .job-detail p {
+            color: var(--text-muted);
+            font-size: 0.89rem;
+        }
+
+        .job-label {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+        }
+
+        .job-label > a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 0.76rem;
+            font-weight: 700;
+            padding: 0.34rem 0.7rem;
+            border-radius: 999px;
+        }
+
+        .label-a {
+            background-color: #ffb04d;
+        }
+
+        .label-b {
+            background-color: #2e8fff;
+        }
+
+        .label-c {
+            background-color: #2f3f5c;
+        }
+
+        .job-posted {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .job-more {
+            display: block;
+            margin: 1.3rem auto 0.4rem;
+            width: min(240px, 90%);
+            padding: 0.72rem 1rem;
+            background: linear-gradient(130deg, var(--accent), var(--accent-deep));
+            color: #fff;
+            box-shadow: 0 8px 18px rgba(216, 106, 27, 0.26);
+        }
+
+        .job-more:hover {
+            transform: translateY(-1px);
+        }
+
+        .join {
+            position: relative;
+            min-height: 320px;
+            margin-top: 2.5rem;
+            border-radius: var(--radius-xl);
+            padding: clamp(1.4rem, 4vw, 3rem);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            background-image:
+                linear-gradient(110deg, rgba(21, 43, 90, 0.85), rgba(12, 99, 194, 0.67)),
+                url("images/joinn.jpeg");
+            background-size: cover;
+            background-position: center;
+            box-shadow: var(--shadow-lift);
+            overflow: hidden;
+        }
+
+        .join::after {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            right: -60px;
+            top: -80px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.25), transparent 70%);
+        }
+
+        .join-detail {
+            width: min(640px, 100%);
+            z-index: 1;
+        }
+
+        .join-detail p {
+            font-size: 1rem;
+            color: #e7f0ff;
+            max-width: 48ch;
+        }
+
+        .join-button {
+            z-index: 1;
+            padding: 0.8rem 1.6rem;
+            background: linear-gradient(130deg, #ffd084, #ff9c38);
+            color: #2e1f0f;
+            box-shadow: 0 8px 20px rgba(255, 156, 56, 0.34);
+        }
+
+        .join-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .featured,
+        .testimoni,
+        .blogs {
+            margin-top: 2.7rem;
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .featured {
+            text-align: center;
+            background: var(--surface);
+            padding: clamp(1.4rem, 5vw, 3rem) 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.45rem, 4vw, 2.3rem);
+            line-height: 1.2;
+            margin-bottom: 0.45rem;
+            color: #132c53;
+        }
+
+        .featured > p {
+            color: var(--text-muted);
+        }
+
+        .featured-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 1rem;
+            width: min(1020px, 100%);
+            margin: 1.6rem auto 0;
+        }
+
+        .featured-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.42rem;
+            padding: 1rem 0.8rem;
+            border-radius: 12px;
+            border: 1px solid #efe3cf;
+            background: linear-gradient(180deg, #fff, #fff8ee);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .featured-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .featured-image {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            border-radius: 16px;
+            background: #fff;
+            border: 1px solid #ebf0f9;
+            padding: 0.5rem;
+        }
+
+        .featured-button {
+            margin-top: 0.2rem;
+            background: #eaf2ff;
+            color: var(--brand-deep);
+            border: 1px solid #cddfff;
+            padding: 0.42rem 0.8rem;
+        }
+
+        .featured-button:hover {
+            transform: translateY(-1px);
+            background: #dce9ff;
+        }
+
+        .testimoni {
+            background: linear-gradient(180deg, #f7fbff, #f1f8ff);
+            padding: 1.1rem;
+        }
+
+        #services .container {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0;
+        }
+
+        #services h3 {
+            grid-column: 1 / -1;
+            width: 100%;
+            margin: 0.2rem 0 1rem;
+            border-bottom: 1px solid #d8e7ff;
+            text-align: center;
+        }
+
+        #services h3 span {
+            display: inline-block;
+            margin-bottom: -1px;
+            padding: 0.52rem 1rem;
+            border-radius: 999px;
+            background: #dceaff;
+            color: #173b73;
+            font-weight: 800;
+        }
+
+        #services .box {
+            padding: 1.4rem 1rem;
+            margin: 0;
+            text-align: center;
+            border: 1px solid #dceaff;
+            min-height: 310px;
+        }
+
+        .bg-primary {
+            background: linear-gradient(180deg, #1e61cd, #0f4ea9);
+            color: #fff;
+        }
+
+        .light-gray {
+            background: #ffffff;
+            color: var(--text);
+        }
+
+        #services h2 {
+            margin-bottom: 0.8rem;
+        }
+
+        .lead {
+            color: inherit;
+            opacity: 0.95;
+        }
+
+        .blogs {
+            background-image:
+                linear-gradient(130deg, rgba(255, 255, 255, 0.93), rgba(255, 246, 233, 0.86)),
+                url("images/Business-Meeting.jpeg");
+            background-size: cover;
+            background-position: center;
+            padding: 1rem;
+        }
+
+        .blog-container {
+            max-width: 900px;
+            margin: 0.4rem auto;
+            border-radius: var(--radius-lg);
+            border: 1px solid #eddcc0;
+            background: rgba(255, 255, 255, 0.93);
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
+            box-shadow: var(--shadow-soft);
+            padding: 1rem;
+        }
+
+        .blog-post {
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid #f1e6d4;
+            background: #fffdf9;
+        }
+
+        .blog-post + .blog-post {
+            margin-top: 0.9rem;
+        }
+
+        .blog-post img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 0.7rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+        }
+
+        .blog-post h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.35rem;
+            color: #203554;
+        }
+
+        .blog-post p {
+            color: var(--text-muted);
+        }
+
+        .blog-post a {
+            display: inline-block;
+            margin-top: 0.6rem;
+            color: var(--brand-deep);
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .blog-post a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 2.7rem;
+            margin-bottom: 1.4rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 1rem;
+            background: linear-gradient(115deg, #111f35, #1b3a66);
+            color: #eaf0ff;
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1.6rem;
+        }
+
+        .footer-wrapper h3,
+        .footer-wrapper h4 {
+            color: #ffd48f;
+            margin-bottom: 0.55rem;
+        }
+
+        .footer-wrapper p {
+            color: #d4e1ff;
+            font-size: 0.92rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .social-media {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .social-media a {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: #ffffff;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.12);
+            transition: transform 0.18s ease, background-color 0.18s ease;
+        }
+
+        .social-media a:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-wrapper a {
+            color: #d6e3ff;
+            text-decoration: none;
+            line-height: 1.95;
+        }
+
+        .footer-wrapper a:hover {
+            color: #ffffff;
+        }
+
+        @keyframes rise-in {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .job-card {
+                grid-template-columns: 1fr;
+            }
+
+            .job-posted {
+                text-align: left;
+            }
+
+            #services .container {
+                grid-template-columns: 1fr;
+            }
+
+            #services .box {
+                min-height: 0;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+                padding-bottom: 0.9rem;
+            }
+
+            .navbar-menu {
+                width: 100%;
+                gap: 0.25rem;
+            }
+
+            header {
+                min-height: 53vh;
+            }
+
+            header::after {
+                font-size: clamp(1.6rem, 9vw, 2.7rem);
+                bottom: 1.6rem;
+            }
+
+            .search-wrapper {
+                margin-top: -1.5rem;
+            }
+
+            .search-card {
+                flex-direction: column;
+            }
+
+            .search-button {
+                width: 100%;
+                padding: 0.82rem;
+            }
+
+            .join {
+                min-height: 290px;
+            }
+
+            .join-button {
+                width: 100%;
+            }
+
+            .featured-wrapper {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif&family=Nunito&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>JOB PORTAL FOR JOB SEEKERS</title>
+</head>
+<body>
+    <nav class="navbar">
+        <h2 class="navbar-logo"><a href="#">JOB-TRACKER</a></h2>
+        <div class="navbar-menu">
+            <a href="#jobs">Jobs</a>
+            <a href="#companies">Companies</a>
+            <a href="#testimonial">Testimonial</a>
+            <a href="#blog">Blogs</a>
+            <a href="#">Sign In</a>
+        </div>
+        <div  class="menu-toggle">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </nav>
+    <header>
+        
+    </header>
+    <div class="search-wrapper">
+        <div class="search-box">
+            <div class="search-card">
+                <input class="search-input" type="text" placeholder="Job title or keywords">
+                <button class="search-button">Search</button>
+            </div>
+
+        </div>
+    </div>
+    <div class="filter-box">
+        <div class="filter-dropdown">
+            <select class="filter-select" id="job-level" name="job-level" aria-label="Job level">
+                <option>Job Level</option>
+                <option>Entry</option>
+                <option>Mid-Senior</option>
+                <option>Director</option>
+            </select>
+            <select class="filter-select" id="job-function" name="job-function" aria-label="Job function">
+                <option>Job Function</option>
+                <option>IT</option>
+                <option>Management</option>
+                <option>Education</option>
+            </select>
+            <select class="filter-select" id="employment" name="employment" aria-label="Employment type">
+                <option>Employment Type</option>
+                <option>Internship</option>
+                <option>Part Time</option>
+                <option>Full Time</option>
+            </select>
+            <select class="filter-select" id="location" name="location" aria-label="Location">
+                <option>Locations</option>
+                <option>Remote</option>
+                <option>US</option>
+                <option>UK</option>
+            </select>
+            <select class="filter-select" id="education" name="education" aria-label="Education">
+                <option>Education</option>
+                <option>High School</option>
+                <option>Bachelor's degree</option>
+                <option>Master's degree</option>
+
+            </select>
+
+        
+
+        </div>
+        <div class="filter-chosen">
+            <div class="chosen-card">
+                Remote <i class="fas fa-times-circle"></i>
+            </div>
+            <div class="chosen-card">
+                Full time <i class="fas fa-times-circle"></i>
+            </div>
+            <div class="chosen-card">
+                Financial Tech <i class="fas fa-times-circle"></i>
+
+            </div>
+            <div class="chosen-card">
+                Entry level <i class="fas fa-times-circle"></i>
+            </div>
+        </div>
+    </div>
+    <section class="job-list" id="jobs">
+        <div class="job-card">
+            <div class="job-name">
+                <img class="job-profile" src="images/image1.jpeg" alt="Microsoft company logo">
+                <div class="job-detail">
+                    <h4>MICROSOFT</h4>
+                    <h3>SOFTWARE Engineer</h3>
+                    <p>QUALIFICATIONS - BTECH,MTECH,MCA</p>
+                </div>
+            </div>
+            <div class="job-label">
+                <a class="label-a" href="#">HTML</a>
+                <a class="label-b" href="#">CSS</a>
+                <a class="label-c" href="#">JAVASCRIPT</a>
+            </div>
+            <div class="job-posted">
+                Posted 2mins ago
+            </div>
+            </div>
+            <div class="job-card">
+                <div class="job-name">
+                    <img class="job-profile" src="images/McKinsey.jpeg" alt="McKinsey company logo">
+                    <div class="job-detail">
+                        <h4>MCKINSEY</h4>
+                        <h3>BUSINESS Management</h3>
+                        <p>QUALIFICATIONS - BBA,MBA</p>
+                    </div>
+                </div>
+                <div class="job-label">
+                    <a class="label-a" href="#">ECONOMICS</a>
+                    <a class="label-b" href="#">Technical KNOWLEDGE</a>
+                    <a class="label-c" href="#">MATHEMATICAL LOGICS</a>
+                </div>
+                <div class="job-posted">
+                    Posted 2mins ago
+                </div>
+                </div>
+                <div class="job-card">
+                <div class="job-name">
+                    <img class="job-profile" src="images/cisco.jpeg" alt="Cisco company logo">
+                    <div class="job-detail">
+                        <h4>CISCO</h4>
+                        <h3>CYBER SECURITY AGENT</h3>
+                        <p>QUALIFICATIONS - BTECH,MTECH,MCA</p>
+                    </div>
+                </div>
+                <div class="job-label">
+                    <a class="label-a" href="#">CRYPTOGRAPHY</a>
+                    <a class="label-b" href="#">NETWORKING</a>
+                    <a class="label-c" href="#">BUG BOUNTY</a>
+                </div>
+                <div class="job-posted">
+                    Posted 2mins ago
+                </div> 
+                </div>
+                <div class="job-card">
+                    <div class="job-name">
+                        <img class="job-profile" src="images/Google.jpeg" alt="YouTube company logo placeholder">
+                        <div class="job-detail">
+                            <h4>YOUTUBE</h4>
+                            <h3>UI UX DESIGNER</h3>
+                            <p>QUALIFICATIONS - BCA,BTECH,MTECH,MCA</p>
+                        </div>
+                    </div>
+                    <div class="job-label">
+                        <a class="label-a" href="#">HTML</a>
+                        <a class="label-b" href="#">CSS</a>
+                        <a class="label-c" href="#">JAVASCRIPT</a>
+                    </div>
+                    <div class="job-posted">
+                                Posted 1hour ago
+                    </div> 
+                    
+                </div>
+                    <button class="job-more">More List</button>
+    </section>
+    <section class="join">
+        <div class="join-detail">
+            <h1 class="section-title">LETS START YOUR NEW JOB WITH US</h1>
+            <p>Unlocking Opportunities Empowering Careers</p>
+        </div>
+        <button class="join-button">JOIN NOW</button>
+    </section>
+    <section class="featured" id="companies">
+        <h1 class="section-title">Featured Companies</h1>
+        <p>The trusted and verified companies which may be path for your careers</p>
+        <div class="featured-wrapper">
+            <div class="featured-card">
+                <img class="featured-image" src="images/image1.jpeg" alt="Microsoft logo">
+                <p>MICROSOFT</p>
+                <button class="featured-button">View 2 jobs</button>
+            </div>
+            <div class="featured-card">
+                <img class="featured-image" src="images/Google.jpeg" alt="YouTube logo placeholder">
+                <p>YOUTUBE</p>
+                <button class="featured-button">View 2 jobs</button>
+            </div>
+            <div class="featured-card">
+                <img class="featured-image" src="images/cisco.jpeg" alt="Cisco logo">
+                <p>CISCO</p>
+                <button class="featured-button">View 2 jobs</button>
+            </div>
+            <div class="featured-card">
+                <img class="featured-image" src="images/McKinsey.jpeg" alt="McKinsey logo">
+                <p>MCKINSEY</p>
+                <button class="featured-button">View 2 jobs</button>
+            </div>
+            <div class="featured-card">
+                <img class="featured-image" src="images/Google.jpeg" alt="Google logo">
+                <p>GOOGLE</p>
+                <button class="featured-button">View 2 jobs</button>
+            </div>
+            <div class="featured-card">
+                <img class="featured-image" src="images/apple.jpeg" alt="Apple logo">
+                <p>APPLE</p>
+                <button class="featured-button">View 2 jobs</button>
+        </div>
+        <div class="featured-card">
+                <img class="featured-image" src="images/Byjus.jpeg" alt="Byjus logo">
+                <p>BYJUS</p>
+                <button class="featured-button">View 2 jobs</button>
+            </div>
+            <div class="featured-card">
+                <img class="featured-image" src="images/Google.jpeg" alt="Walmart logo placeholder">
+                <p>WALMART</p>
+                <button class="featured-button">View 2 jobs</button>
+            </div>
+            <div class="featured-card">
+                <img class="featured-image" src="images/EY.jpeg" alt="EY logo">
+                <p>EY</p>
+                <button class="featured-button">View 2 jobs</button>
+            </div>
+            <div class="featured-card">
+                <img class="featured-image" src="images/amazon.jpeg" alt="Amazon logo">
+                <p>AMAZON</p>
+                <button class="featured-button">View 2 jobs</button>
+            </div>
+        </div>
+    </section>
+    <section class="testimoni" id="testimonial">
+    <div id="services">
+        <div class="container">
+          <h3 class="bg-dark-line"><span>Testimonial</span></h3>
+          <div class="box bg-primary">
+            <h2>FOUNDER</h2>
+            <i class="fas fa-paint-brush fa-4x"></i>
+            <h3>Mrittick Deb</h3>
+            <p class="lead">
+                From a visionary idea to a thriving reality, JOB-TRACKER embodies innovation, fueled by a passionate team and unwavering customer trust. Grateful for the journey and excited for the future we're shaping together.
+            </p>
+          </div>
+          <div class="box light-gray">
+            <h2>CEO</h2>
+            <i class="fas fa-chart-line fa-4x"></i>
+            <h3>Patala Giresh</h3>
+            <p class="lead">
+                Our startup journey has been nothing short of remarkable. Grateful for the dedicated team and the incredible support that has propelled us to success!
+            </p>
+          </div>
+          <div class="box bg-primary">
+            <h2>COO</h2>
+            <i class="fas fa-cogs fa-4x"></i>
+            <h3>Suraj Prakash</h3>
+            <p class="lead">
+                Joining this startup was a game-changer for me. The innovative, culture, agile mindset, and relentless pursuit of excellence make it an exhilarating journey with boundless opportunities.
+            </p>
+          </div>
+        </div>
+      </div>
+  
+    </section>
+    <section class="blogs" id="blog">
+    <div class="blog-container">
+        <div class="blog-post">
+            <img src="images/Job_Interview.jpeg" alt="Technical interview illustration">
+            <h2>10 Tips for Technical Interview</h2>
+            <p>Brush up on fundamental concepts related to the position. This may include data structures, algorithms, programming languages, and other relevant topics.</p>
+            <a href="#">Read More</a>
+        </div>
+        <div class="blog-post">
+            <img src="images/Business-Meeting.jpeg" alt="Team collaboration illustration">
+            <h2>Tips for Effective Team Collaboration</h2>
+            <p>Ensure that each team member understands their role and responsibilities. Clearly define expectations to avoid confusion and conflicts over tasks and deadlines.</p>
+
+            <a href="#">Read More</a>
+      </div> 
+    </div> 
+    </section>
+    
+    <footer>
+        <div class="footer-wrapper">
+            <h3>JOB-TRACKER</h3>
+            <p>OUR SOCIAL MEDIA HANDLES</p>
+            <div class="social-media">
+                <a href="#" aria-label="Facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Twitter" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="LinkedIn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" aria-label="YouTube" title="YouTube"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+        <div class="footer-wrapper">
+            <h4>Explore</h4>
+            <a href="#">Top Companies</a>
+            <a href="#">Terms of Services</a>
+            <a href="#">Podcast</a>
+            <a href="#">Careers</a>
+        </div>
+        <div class="footer-wrapper">
+            <h4>About</h4>
+            <a href="#">FAQ</a>
+            <a href="#">Get Inspired</a>
+            <a href="#">Blog</a>
+            
+        </div>
+        <div class="footer-wrapper">
+            <h4>Support</h4>
+            <a href="#">Customer Services</a>
+            <a href="#">Trust & Safety</a>
+            <a href="#">Partnership</a>
+            
+        </div>
+        <div class="footer-wrapper">
+            <h4>Community</h4>
+            <a href="#">Community</a>
+            <a href="#">Invite a Friend</a>
+            <a href="#">Event</a>
+            
+        </div>
+    </footer>
+    
+</body>
+</html>
